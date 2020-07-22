@@ -101,7 +101,7 @@ export function getSlicedData(
 export function getTooltipHtml(data: DogDescriptionItem): string {
 	return `
 	<h2>${data.name.toUpperCase()}</h2>
-	<img src=${data.imgSrc} style="width: 100px;"> </img>
+	<img src=${process.env.PUBLIC_URL + data.imgSrc} style="width: 100px;"> </img>
 	Age: ${Math.round(data.age)}<br />Posted: ${data.posted.toDateString()}
 	<br /> Adoptable: ${data.adoptable}
 	<br /> State: ${data.state}

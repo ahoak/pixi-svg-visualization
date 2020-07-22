@@ -13,22 +13,22 @@ export const RendererOptions: IChoiceGroupOption[] = [
 	{
 		key: Renderers.SVG,
 		text: Renderers.SVG,
-		imageSrc: '/cocker-sp-outline.svg',
-		selectedImageSrc: '/cocker-sp.svg',
+		imageSrc: `${process.env.PUBLIC_URL}/cocker-sp-outline.svg`,
+		selectedImageSrc: `${process.env.PUBLIC_URL}/cocker-sp.svg`,
 		imageSize: { width: 32, height: 32 },
 	},
 	{
 		key: Renderers.Canvas,
 		text: Renderers.Canvas,
-		imageSrc: '/cocker-sp-outline.svg',
-		selectedImageSrc: '/cocker-sp.svg',
+		imageSrc: `${process.env.PUBLIC_URL}/cocker-sp-outline.svg`,
+		selectedImageSrc: `${process.env.PUBLIC_URL}/cocker-sp.svg`,
 		imageSize: { width: 32, height: 32 },
 	},
 	{
 		key: Renderers.WebGL,
 		text: Renderers.WebGL,
-		imageSrc: '/cocker-sp-outline.svg',
-		selectedImageSrc: '/cocker-sp.svg',
+		imageSrc: `${process.env.PUBLIC_URL}/cocker-sp-outline.svg`,
+		selectedImageSrc: `${process.env.PUBLIC_URL}/cocker-sp.svg`,
 		imageSize: { width: 32, height: 32 },
 	},
 ]

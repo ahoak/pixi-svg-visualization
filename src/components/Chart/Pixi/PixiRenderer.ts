@@ -14,7 +14,7 @@ export * from 'pixi.js-legacy'
 export * from '@pixi/canvas-renderer'
 
 const duration = 1000
-const radius = 2
+const radius = 4
 
 class PixiRenderer {
 	private pixiElement: HTMLDivElement

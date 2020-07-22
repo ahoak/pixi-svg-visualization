@@ -1,9 +1,10 @@
 import React, { memo } from 'react'
 import styled from 'styled-components'
+const imageURL = process.env.PUBLIC_URL + '/dog.svg'
 export const Logo: React.FC = memo(function Logo() {
 	return (
 		<Container>
-			<LogoText src={'/dog.svg'} alt="puppy" />
+			<LogoText src={imageURL} alt="puppy" />
 		</Container>
 	)
 })

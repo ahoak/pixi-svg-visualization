@@ -1,4 +1,4 @@
-import { useEffect, useCallback } from 'react'
+import { useCallback, useLayoutEffect } from 'react'
 import { useSelectionOnNode } from '../../hooks/useSelectionOnNode'
 import { Selection, select } from 'd3-selection'
 import { transition } from 'd3-transition'
@@ -11,7 +11,7 @@ import {
 import { ScaleProps } from '../../types'
 
 const t: any = transition().duration(1000)
-const defaultRadius = 2
+const defaultRadius = 4
 
 interface DrawCircles {
 	element: SVGGElement | null
@@ -50,7 +50,7 @@ export function useCircleDrawing({
 		[colorScale, yAxisFilter],
 	)
 
-	useEffect(() => {
+	useLayoutEffect(() => {
 		if (elementSelection !== null && data.length > 0) {
 			elementSelection
 				.selectAll('.dog-nodes')
@@ -92,16 +92,18 @@ export function useCircleDrawing({
 				)
 				.on('mouseover', function (d: DogDescriptionItem) {
 					// @ts-ignore
-					select(this).attr('r', defaultRadius * 2)
+					select(this)
+						.attr('r', defaultRadius * 2)
+						.attr('fill', '#2e78ce')
 					const x: number = getXValue(d)
 					const y: number = getYValue(d)
 					const coords = [x, y] as [number, number]
 					// show tooltip
 					onCircleMouseover(d, coords)
 				})
-				.on('mouseout', function () {
+				.on('mouseout', function (d: DogDescriptionItem) {
 					// @ts-ignore
-					select(this).attr('r', defaultRadius)
+					select(this).attr('r', defaultRadius).attr('fill', getColor(d))
 					onCircleMouseout()
 				})
 		}
