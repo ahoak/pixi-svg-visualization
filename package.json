@@ -5,6 +5,7 @@
 	"engines": {
 		"node": ">=10"
 	},
+	"homepage": "https://ahoak.github.io/pixi-svg-visualization",
 	"dependencies": {
 		"@essex/eslint-config": "7.1.0",
 		"@essex/prettier-config": "7.3.2",

@@ -1,7 +1,7 @@
-# renderer-benchmark
+# Pixi-SVG-Visualization
 
-benchmark for SVG, Canvas, WebGL using D3.js and Pixi.js v5
+Example Simple Data Visual using Pixi.js webGL renderer layered on top of SVG.
 
-deployed application: https://ahoak.github.io/renderer-benchmark/
+deployed application: https://ahoak.github.io/pixi-svg-visualization
 
 Icons made by Freepik from www.flaticon.com
