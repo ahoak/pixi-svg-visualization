@@ -4,10 +4,10 @@ import VisualizePage from '../VisualizePage'
 import { useDogData } from '../../hooks/useDogData'
 
 export const IndexPage: React.FC = memo(function IndexPage() {
-	const data = useDogData()
+	const [data, details] = useDogData()
 	return data ? (
 		<Container>
-			<VisualizePage data={data} />
+			<VisualizePage data={data} details={details} />{' '}
 		</Container>
 	) : (
 		<Loading>

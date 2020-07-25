@@ -1,9 +1,8 @@
-import { FilterYOptions, FilterOptions } from '../../../../types/data'
 import { useState, useEffect, useMemo, useCallback } from 'react'
 import PixiRenderer from '../PixiRenderer'
 import { Dimensions } from '../../../../utils/types'
 import { Renderers } from '../../../Controls/RendererControls'
-import { ScaleProps } from '../../types'
+import { DogMap } from '../../../../types/data'
 
 export interface PixiInstance {
 	containerElement: HTMLDivElement | null
@@ -11,9 +10,7 @@ export interface PixiInstance {
 	width: number
 	height: number
 	renderer: Renderers
-	scales: ScaleProps
-	yAxisFilter: FilterYOptions
-	xAxisFilter: FilterOptions
+	details?: DogMap
 }
 
 export function usePixiInstance({
@@ -22,9 +19,7 @@ export function usePixiInstance({
 	toolTipElement,
 	containerElement,
 	renderer,
-	scales,
-	yAxisFilter,
-	xAxisFilter,
+	details,
 }: // events,
 PixiInstance): PixiRenderer | undefined {
 	const [pixiInstance, setPixiInstance] = useState<PixiRenderer | undefined>()
@@ -43,22 +38,11 @@ PixiInstance): PixiRenderer | undefined {
 			pixiInstance.setTooltipElement(toolTipElement)
 		}
 	}, [toolTipElement, pixiInstance])
-
-	const filters = useMemo(() => ({ x: xAxisFilter, y: yAxisFilter }), [
-		xAxisFilter,
-		yAxisFilter,
-	])
-
-	useEffect(() => {
+	useMemo(() => {
 		if (pixiInstance) {
-			pixiInstance.setFilters(filters)
+			pixiInstance.setTooltipDetails(details)
 		}
-	}, [filters, pixiInstance])
-	useEffect(() => {
-		if (pixiInstance) {
-			pixiInstance.setScales(scales)
-		}
-	}, [scales, pixiInstance])
+	}, [details, pixiInstance])
 
 	const setUpPixi = useCallback(
 		(instance?: PixiRenderer) => {
@@ -68,13 +52,11 @@ PixiInstance): PixiRenderer | undefined {
 					toolTipElement,
 					dimensions,
 					renderer,
-					filters,
-					scales,
 				)
 				setPixiInstance(PIXIinstance)
 			}
 		},
-		[containerElement, toolTipElement, dimensions, renderer, scales, filters],
+		[containerElement, toolTipElement, dimensions, renderer],
 	)
 	useEffect(() => {
 		if (pixiInstance) {

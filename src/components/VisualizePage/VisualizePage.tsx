@@ -2,8 +2,7 @@ import React, { memo, useCallback, useState } from 'react'
 import { Page } from '../../common/styled'
 import styled from 'styled-components'
 import { useStateSelection } from '../../hooks/useStateSelection'
-import { DogDescriptionItem } from '../../types/data'
-import { useDataBounds } from '../../hooks/useDataBounds'
+import { DogDescriptionItem, DogMap } from '../../types/data'
 import { Header } from '../Header'
 import { Footer } from '../Footer'
 import { Controls } from '../Controls/Controls'
@@ -15,9 +14,10 @@ const sizeStyles = { overflowY: 'hidden' } as React.CSSProperties
 
 export interface VisualizePageProps {
 	data: DogDescriptionItem[]
+	details?: DogMap
 }
 export const VisualizePage: React.FC<VisualizePageProps> = memo(
-	function VisualizePage({ data }) {
+	function VisualizePage({ data, details }) {
 		// get dimensions from ref
 		const [chartDimensions, setChartDimensions] = useState<
 			Dimensions | undefined
@@ -32,32 +32,25 @@ export const VisualizePage: React.FC<VisualizePageProps> = memo(
 
 		const [selectedRenderer, onRendererChange] = useRendererSelection()
 		// handle events and selection for dropdown
-		const [
-			xAxisFilter,
-			onXDropDrownChange,
-			yAxisFilter,
-			onYDropDrownChange,
-		] = useStateSelection()
+		const [yAxisFilter, onYDropDrownChange] = useStateSelection()
 		// Map selected data values based on selections and get data bounds
-		const {
-			chartData,
-			selectedMax,
-			sliderSettings,
-			onSliderChange,
-			maxX,
-			minX,
-		} = useDataBounds(data, xAxisFilter)
+		// const {
+		// 	chartData,
+		// 	selectedMax,
+		// 	sliderSettings,
+		// 	onSliderChange,
+		// 	maxX,
+		// 	minX,
+		// } = useDataBounds(data, xAxisFilter)
 		return (
 			<Container>
 				<Selections>
 					<Header />
 					<Controls
-						xAxisFilter={xAxisFilter}
 						yAxisFilter={yAxisFilter}
-						onSliderChange={onSliderChange}
-						selectedMax={selectedMax}
-						sliderSettings={sliderSettings}
-						onXDropDrownChange={onXDropDrownChange}
+						// onSliderChange={onSliderChange}
+						// selectedMax={selectedMax}
+						// sliderSettings={sliderSettings}
 						onYDropDrownChange={onYDropDrownChange}
 						selectedRender={selectedRenderer}
 						onRendererChange={onRendererChange}
@@ -69,12 +62,10 @@ export const VisualizePage: React.FC<VisualizePageProps> = memo(
 							<ChartContainer
 								width={chartDimensions.width}
 								height={chartDimensions.height}
-								data={chartData}
+								data={data}
 								yAxisFilter={yAxisFilter}
-								xAxisFilter={xAxisFilter}
-								maxXComputed={maxX}
-								minXComputed={minX}
 								renderer={selectedRenderer}
+								details={details}
 							/>
 						) : (
 							<></>

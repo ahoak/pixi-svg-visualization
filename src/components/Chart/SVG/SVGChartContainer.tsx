@@ -1,22 +1,20 @@
-import React, { memo, useRef } from 'react'
-import {
-	FilterYOptions,
-	FilterOptions,
-	DogDescriptionItem,
-} from '../../../types/data'
+import React, { memo } from 'react'
+import { DogMap } from '../../../types/data'
 import { BeeSwarmContainer } from './BeeSwarmSVG'
 import styled from 'styled-components'
-import { ScaleProps } from '../types'
+import { ScaleBand, ScaleLinear } from 'd3-scale'
+import { useCallbackRef } from '../hooks/useCallbackRef'
+import { Data } from '../types'
 
 export interface SVGContainerProps {
-	data: DogDescriptionItem[]
+	data: Data[]
 	width: number
 	height: number
 	vpHeight: number
 	vpWidth: number
-	yAxisFilter: FilterYOptions
-	xAxisFilter: FilterOptions
-	scales: ScaleProps
+	yScale: ScaleBand<string>
+	xScale: ScaleLinear<number, number>
+	details?: DogMap
 }
 
 export const SVGBeeSwarm: React.FC<SVGContainerProps> = memo(
@@ -26,11 +24,11 @@ export const SVGBeeSwarm: React.FC<SVGContainerProps> = memo(
 		height,
 		vpHeight,
 		vpWidth,
-		yAxisFilter,
-		xAxisFilter,
-		scales,
+		yScale,
+		xScale,
+		details,
 	}: SVGContainerProps) {
-		const tooltip = useRef<HTMLDivElement | null>(null)
+		const [setTooltip, tooltip] = useCallbackRef<HTMLDivElement | null>()
 		return (
 			<ChartStyle>
 				<BeeSwarmContainer
@@ -39,12 +37,13 @@ export const SVGBeeSwarm: React.FC<SVGContainerProps> = memo(
 					vpHeight={vpHeight}
 					vpWidth={vpWidth}
 					data={data}
-					yAxisFilter={yAxisFilter}
-					xAxisFilter={xAxisFilter}
-					tooltip={tooltip.current}
-					scales={scales}
+					tooltip={tooltip}
+					yScale={yScale}
+					xScale={xScale}
+					details={details}
+					showData={true}
 				/>
-				<ToolTip ref={tooltip} className="tooltip-svg-ref" />
+				<ToolTip ref={setTooltip} className="tooltip-svg-ref" />
 			</ChartStyle>
 		)
 	},

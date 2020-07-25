@@ -2,25 +2,23 @@ import React, { memo } from 'react'
 import { useCallbackRef } from '../hooks/useCallbackRef'
 import { correctedMargins } from '../constants'
 import { useResizeHandling } from '../hooks/useResizeHandling'
-import {
-	FilterYOptions,
-	FilterOptions,
-	DogDescriptionItem,
-} from '../../../types/data'
+import { DogMap } from '../../../types/data'
 import { useCircleDrawing } from './hooks/draw'
-import { ScaleProps } from '../types'
 import { useXAxisTheming, useYAxisTheming } from '../hooks/axis'
+import { ScaleBand, ScaleLinear } from 'd3-scale'
+import { Data } from '../types'
 
 export interface BeeSwarmContainerProps {
-	data: DogDescriptionItem[]
+	data: Data[]
 	width: number
 	height: number
 	vpHeight: number
 	vpWidth: number
-	yAxisFilter: FilterYOptions
-	xAxisFilter: FilterOptions
-	tooltip: HTMLDivElement | null
-	scales: ScaleProps
+	tooltip?: HTMLDivElement | null
+	yScale: ScaleBand<string>
+	xScale: ScaleLinear<number, number>
+	showData: boolean
+	details?: DogMap
 }
 
 export const BeeSwarmContainer: React.FC<BeeSwarmContainerProps> = memo(
@@ -29,11 +27,12 @@ export const BeeSwarmContainer: React.FC<BeeSwarmContainerProps> = memo(
 		width,
 		height,
 		tooltip,
-		scales,
 		vpHeight,
 		vpWidth,
-		yAxisFilter,
-		xAxisFilter,
+		yScale,
+		xScale,
+		showData,
+		details,
 	}: BeeSwarmContainerProps) {
 		// Get Refs for SVG Elements
 		const [setSvgEl, svgElementRef] = useCallbackRef<SVGSVGElement>()
@@ -43,8 +42,6 @@ export const BeeSwarmContainer: React.FC<BeeSwarmContainerProps> = memo(
 			setBeeSwarmContainerElement,
 			BeeSwarmContainerElement,
 		] = useCallbackRef<SVGGElement>()
-
-		const { xScale, yScale } = scales
 
 		// Optional: Apply thematic D3 themes
 		useResizeHandling(svgElementRef, width, height)
@@ -57,25 +54,9 @@ export const BeeSwarmContainer: React.FC<BeeSwarmContainerProps> = memo(
 			element: BeeSwarmContainerElement,
 			data,
 			tooltip,
-			scales,
-			yAxisFilter,
-			xAxisFilter,
+			details,
+			showData,
 		})
-
-		// === without animation ====
-		// const circles = useMemo(() => {
-		// 	return data.map(d => {
-		// 		return (
-		// 			<circle
-		// 				cx={xScale(d[xAxisFilter])}
-		// 				cy={(yScale(d[yAxisFilter]) || 0) + yScale.bandwidth() / 2}
-		// 				fill={colorScale(d[yAxisFilter]).hex()}
-		// 				r={2}
-		// 				key={d.id}
-		// 			/>
-		// 		)
-		// 	})
-		// }, [data, xScale, yScale, colorScale])
 
 		return (
 			<div style={{ position: 'absolute', zIndex: 1 }}>
@@ -87,7 +68,6 @@ export const BeeSwarmContainer: React.FC<BeeSwarmContainerProps> = memo(
 						<g className="yscale" ref={setYAxisElement}></g>
 						<g className="xscale" ref={setXAxisElement}></g>
 						<g className="plotarea" width={vpWidth} height={vpHeight}>
-							{/* {circles} */}
 							<g ref={setBeeSwarmContainerElement} className="beeswarm"></g>
 						</g>
 					</g>

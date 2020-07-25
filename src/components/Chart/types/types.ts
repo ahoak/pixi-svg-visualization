@@ -1,16 +1,11 @@
 import * as PIXI from 'pixi.js'
-import { ScaleLinear, ScaleBand, ScaleTime } from 'd3-scale'
-import {
-	FilterOptions,
-	FilterYOptions,
-	DogDescriptionItem,
-} from '../../../types/data'
+import { XYCoordinates } from '../../../types/data'
 
 export interface SpriteInternalCoords {
 	x: number
 	y: number
-	hex?: string
-	node: DogDescriptionItem
+	hex: number
+	node: Data
 }
 export interface SpriteData {
 	sprite: PIXI.Sprite
@@ -20,33 +15,6 @@ export interface SpriteData {
 export interface SpriteMap {
 	[key: string]: SpriteData
 }
-
-export interface Filters {
-	x: FilterOptions
-	y: FilterYOptions
-}
-export interface ScaleProps {
-	xScale: ScaleLinear<number, number> | ScaleTime<number, number>
-	yScale: ScaleBand<string>
-	colorScale?: (item: string) => string
-}
-
-export interface PixiData {
-	x: number
-	y: number
-	visible: boolean
-	color: number
-	hex: string
-	r: number
+export interface Data extends XYCoordinates {
 	id: string
-	data: DogDescriptionItem
-}
-
-export interface DataMap {
-	[id: string]: PixiData
-}
-
-export interface FilterMap {
-	y: FilterYOptions
-	x: FilterOptions
 }

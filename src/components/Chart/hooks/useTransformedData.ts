@@ -1,93 +1,56 @@
-import { ScaleLinear, ScaleBand, ScaleTime } from 'd3-scale'
-import { useMemo, useCallback } from 'react'
-import {
-	DogDescriptionItem,
-	FilterOptions,
-	FilterYOptions,
-} from '../../../types/data'
-import { DataMap, PixiData } from '../types'
+import { ScaleBand } from 'd3-scale'
+import { useMemo } from 'react'
+import { FilterYOptions, DogDescriptionItem } from '../../../types/data'
+import { Data } from '../types'
 const radius = 2
 interface TransformedDataProps {
+	vpWidth: number
+	vpHeight: number
 	data: DogDescriptionItem[]
-	visibleIDS: Set<string>
-	xAxisFilter: FilterOptions
 	yAxisFilter: FilterYOptions
-	xScale: ScaleLinear<number, number> | ScaleTime<number, number>
 	yScale: ScaleBand<string>
-	colorScale: (item: string) => string
 }
 export function useTransformedData({
 	data,
-	visibleIDS,
-	xAxisFilter,
-	yAxisFilter,
-	xScale,
 	yScale,
-	colorScale,
-}: TransformedDataProps): DataMap {
-	const getNodeColor = useCallback(
-		(d: DogDescriptionItem): string => {
-			return colorScale(d[yAxisFilter]).replace('#', '')
-		},
-		[colorScale, yAxisFilter],
-	)
-
-	const parseColor = (color: string) => {
-		const clean = color.replace('#', '')
-		return parseInt(clean, 16)
-	}
-
-	const getXValue = useCallback(
-		(d: DogDescriptionItem) => {
-			return xScale(d[xAxisFilter]) || 0
-		},
-		[xAxisFilter, xScale],
-	)
-	const getYValue = useCallback(
-		(d: DogDescriptionItem) => {
-			return (yScale(d[yAxisFilter]) || 0) + yScale.bandwidth() / 2
-		},
-		[yAxisFilter, xScale],
-	)
-
-	return useMemo((): DataMap => {
-		const dataByBand: DataBand = {}
-		const mapData = data.reduce((acc, d) => {
-			const hex = getNodeColor(d)
-			const value = {
-				x: getXValue(d),
-				y: getYValue(d),
-				color: parseColor(hex),
-				hex,
-				r: visibleIDS.has(`${d.petId}`) ? radius : 0,
-				id: `${d.petId}`,
-				visible: visibleIDS.has(`${d.petId}`),
-				data: d,
-			} as PixiData
-			acc[value.id] = value
-			if (dataByBand[d[yAxisFilter]]) {
-				dataByBand[d[yAxisFilter]].push(value)
-			} else {
-				dataByBand[d[yAxisFilter]] = [value]
+	vpHeight,
+	vpWidth,
+	yAxisFilter,
+}: TransformedDataProps): Data[] {
+	const mappedData = useMemo((): Data[] => {
+		return data.reduce((acc, d) => {
+			const coords = d.pos
+			const found = coords.find(o => o.yFilter === yAxisFilter)
+			if (found) {
+				const y = found.y * vpHeight + yScale.bandwidth() / 2
+				const x = found.x * vpWidth
+				acc.push(
+					Object.assign(
+						{},
+						{
+							x,
+							y,
+							color: found.color,
+							hex: found.hex,
+							id: d.id,
+							yFilter: found.yFilter,
+						},
+					),
+				)
 			}
-
 			return acc
-		}, {} as DataMap)
-		// modify y value to "jiggle" up or down value
-		// Object.keys(dataByBand).map(key => {
-		// 	return mapHeight(dataByBand[key], radius, yScale.bandwidth())
-		// })
-		return mapData
-	}, [data, getXValue, getYValue, getNodeColor, yAxisFilter, yScale])
-}
-interface DataBand {
-	[key: string]: PixiData[]
-}
-interface HMap {
-	[key: number]: PixiData[]
+		}, [] as Data[])
+	}, [vpWidth, vpHeight, data, yAxisFilter, yScale])
+	return useMemo((): any[] => {
+		return mapHeight(mappedData, radius, yScale.bandwidth())
+	}, [mappedData, yScale])
 }
 
-function mapHeight(data: PixiData[], radius: number, maxBandwidth: number) {
+interface HMap {
+	[key: number]: Data[]
+}
+
+function mapHeight(data: Data[], radius: number, maxBandwidth: number) {
 	let hMap: HMap = {}
 	let rFactor = 0
 	let xOffset = radius * 2

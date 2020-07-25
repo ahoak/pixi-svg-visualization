@@ -1,23 +1,26 @@
 import { useCallback } from 'react'
 import { useTooltipPositioner } from './useTooltipPositioner'
-import { DogDescriptionItem } from '../../../../types/data'
+import { DogMap } from '../../../../types/data'
 import { getTooltipHtml } from '../../../../utils'
 
 export function useHoverEvents(
-	tooltip: HTMLDivElement | null,
+	tooltip?: HTMLDivElement | null,
+	details?: DogMap,
 ): [
 	// onMouseEnter
-	(d: DogDescriptionItem, coords: [number, number]) => void,
+	(d: string, coords: [number, number]) => void,
 	// onMouseLeave
 	() => void,
 ] {
 	const showToolTip = useTooltipPositioner(tooltip)
 
 	const onMouseEnter = useCallback(
-		(data: DogDescriptionItem, coords: [number, number]) => {
+		(id: string, coords: [number, number]) => {
 			if (tooltip) {
+				const innerHTML =
+					details && details[id] ? getTooltipHtml(details[id]) : ''
 				tooltip.style.padding = `2px`
-				tooltip.innerHTML = getTooltipHtml(data)
+				tooltip.innerHTML = innerHTML
 				tooltip.style.backgroundColor = '#f1f1f1'
 				tooltip.style.border = `1px solid #767676`
 				tooltip.style.color = 'black'
@@ -27,7 +30,7 @@ export function useHoverEvents(
 				showToolTip(coords)
 			}
 		},
-		[tooltip, showToolTip],
+		[tooltip, showToolTip, details],
 	)
 	const onMouseLeave = useCallback(() => {
 		if (tooltip) {

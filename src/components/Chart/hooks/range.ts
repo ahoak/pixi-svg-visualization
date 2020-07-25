@@ -4,20 +4,24 @@ import {
 	GenderYRange,
 	SizeYRange,
 	FilterYOptions,
+	DogMap,
 } from '../../../types/data'
 
 // Get X Extent
-export function useXRange(
-	maxXComputed: number | Date,
-	minXComputed: number | Date,
-): [number | Date, number | Date] {
+export function useXRange(dogMap?: DogMap): [number, number] {
 	return useMemo(() => {
-		if (typeof minXComputed === 'number') {
-			// start at zero for numerical axis
-			return [0, maxXComputed as number]
+		if (dogMap) {
+			const maxAge = Object.keys(dogMap).reduce((acc, id) => {
+				const details = dogMap[id]
+				if (details.age > acc) {
+					acc = details.age
+				}
+				return acc
+			}, 0 as number)
+			return [0, maxAge]
 		}
-		return [minXComputed, maxXComputed]
-	}, [maxXComputed, minXComputed])
+		return [0, 0]
+	}, [dogMap])
 }
 
 // Get Y Bands

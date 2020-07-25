@@ -1,20 +1,18 @@
-import { SpriteMap, FilterMap, ScaleProps } from '../types'
+import { SpriteMap, SpriteInternalCoords, Data } from '../types'
 import * as PIXI from 'pixi.js'
 import { Dimensions } from '../../../utils/types'
-import { circle, attrs } from './utils'
 import { easeCubic } from 'd3-ease'
 import { correctedMargins } from '../constants'
 import TooltipManager from './utils/TooltipManager'
 import { Renderers } from '../../Controls/RendererControls'
-import { DogDescriptionItem } from '../../../types/data'
-import ScalesManager from './utils/ScalesManager'
+import { DogMap } from '../../../types/data'
 // @ts-ignore
 export * from 'pixi.js-legacy'
 // @ts-ignore
 export * from '@pixi/canvas-renderer'
 
 const duration = 1000
-const radius = 4
+const radius = 2
 
 class PixiRenderer {
 	private pixiElement: HTMLDivElement
@@ -27,7 +25,6 @@ class PixiRenderer {
 	private tweenedScale = 1
 	private ToolTipManagerInstance?: TooltipManager //handles visibility of tooltip
 	private rendererType: Renderers
-	public ScalesManagerInstance: ScalesManager
 	private spriteMap: SpriteMap = {}
 
 	constructor(
@@ -35,14 +32,11 @@ class PixiRenderer {
 		toolTipElement: HTMLDivElement | null,
 		dimensions: Dimensions,
 		renderer: Renderers,
-		filters: FilterMap,
-		scales: ScaleProps,
 	) {
 		this.dimensions = dimensions
 		this.pixiElement = containerEl
 		this.ToolTipManagerInstance = new TooltipManager(toolTipElement)
 		this.rendererType = renderer
-		this.ScalesManagerInstance = new ScalesManager(filters, scales)
 		// === set up pixi stuff ===
 		this.renderer = this.setRenderer(renderer, dimensions)
 		const circleTemplate = new PIXI.Graphics()
@@ -81,7 +75,7 @@ class PixiRenderer {
 		})
 		const rendererType =
 			pixiRender.type === PIXI.RENDERER_TYPE.CANVAS ? 'CANVAS' : 'WEBGL'
-		console.log('pixiRenderer', rendererType)
+		console.log(`pixiRenderer flavor: ${rendererType}`)
 		return pixiRender
 	}
 
@@ -89,21 +83,18 @@ class PixiRenderer {
 		return this.rendererType
 	}
 
-	public setScales(scales: ScaleProps) {
-		this.ScalesManagerInstance.setScales(scales)
-	}
-
-	public setFilters(filters: FilterMap) {
-		this.ScalesManagerInstance.setFilters(filters)
-	}
-
 	public setTooltipElement(element: HTMLDivElement | null) {
 		if (this.ToolTipManagerInstance) {
 			this.ToolTipManagerInstance.setTooltipElement(element)
 		}
 	}
+	public setTooltipDetails(dogMap?: DogMap) {
+		if (this.ToolTipManagerInstance) {
+			this.ToolTipManagerInstance.setDogMap(dogMap)
+		}
+	}
 
-	public updateChart(data: DogDescriptionItem[]) {
+	public updateChart(data: Data[]) {
 		this.updateTransition(data)
 	}
 
@@ -120,14 +111,20 @@ class PixiRenderer {
 
 	// More info on managing pixi sprites for improving performance
 	// https://stackoverflow.com/questions/33437002/pixi-js-animate-circle-improving-performance
-	private enter(data: DogDescriptionItem[]) {
+	private enter(data: Data[]) {
 		if (data) {
 			// Set the sprite map up once
 			data.forEach(node => {
 				const sprite = new PIXI.Sprite(this.circleTexture)
-				const posAttrs = this.ScalesManagerInstance.getXYPosition(node, radius)
-				attrs(sprite, circle(posAttrs, radius))
-				const key = `${node.petId}`
+				const posAttrs = {
+					x: node.x - radius,
+					y: node.y - radius,
+					hex: node.hex,
+					node,
+				}
+				this.mapSpriteProps(sprite, posAttrs, radius)
+
+				const key = `${node.id}`
 				sprite.name = key
 				// map sprite key with sprite
 				this.spriteMap[key] = { sprite, _data: posAttrs }
@@ -150,9 +147,8 @@ class PixiRenderer {
 
 		if (this.spriteMap[nodeId] && this.ToolTipManagerInstance) {
 			const { sprite, _data } = this.spriteMap[nodeId]
-			// const current = this.data[nodeId]
 			const coords = [_data.x, _data.y] as [number, number]
-			this.ToolTipManagerInstance.showToolTip(_data.node, coords)
+			this.ToolTipManagerInstance.showToolTip(_data.node.id, coords)
 			const hoverColor = '#2e78ce'
 			sprite.height = 20
 			sprite.width = 20
@@ -172,7 +168,7 @@ class PixiRenderer {
 			const { sprite, _data } = this.spriteMap[nodeId]
 			const defaultColor = _data.hex
 			if (defaultColor) {
-				sprite.tint = parseInt(defaultColor.replace('#', ''), 16)
+				sprite.tint = defaultColor
 			}
 			sprite.height = 4
 			sprite.width = 4
@@ -181,7 +177,20 @@ class PixiRenderer {
 		this.renderPixi()
 	}
 
-	private updateTransition(currentData: DogDescriptionItem[]) {
+	private mapSpriteProps(
+		sprite: PIXI.Sprite,
+		coords: SpriteInternalCoords,
+		radius: number,
+	): void {
+		sprite.x = coords.x
+		sprite.y = coords.y
+		sprite.width = radius * 2
+		sprite.height = radius * 2
+		sprite.alpha = 1.0
+		sprite.tint = coords.hex
+	}
+
+	private updateTransition(currentData: Data[]) {
 		if (Object.keys(this.spriteMap).length > 0) {
 			let startScale = this.tweenedScale
 			let targetScale = 1
@@ -196,20 +205,23 @@ class PixiRenderer {
 				const finalScale = startScale + (targetScale - startScale) * eased
 				// track which ones need to be visible
 				const spriteQueue = this.spriteKeys
-				const nodesToAdd: DogDescriptionItem[] = []
+				const nodesToAdd: Data[] = []
 				currentData.forEach(currNode => {
-					const spriteKey = `${currNode.petId}`
+					const spriteKey = `${currNode.id}`
 					if (this.spriteMap[spriteKey]) {
 						const { sprite, _data } = this.spriteMap[spriteKey]
-						const currNodePos = this.ScalesManagerInstance.getXYPosition(
-							currNode,
-							radius,
-						)
+						const currNodePos = {
+							x: currNode.x - radius,
+							y: currNode.y - radius,
+							hex: currNode.hex,
+							node: currNode,
+						}
 						const prevNode = _data
 
 						spriteQueue.delete(spriteKey)
 						sprite.visible = true
-						attrs(sprite, circle(currNodePos, radius))
+						this.mapSpriteProps(sprite, currNodePos, radius)
+
 						const x = eased * (currNodePos.x - prevNode.x) + prevNode.x
 						const y = eased * (currNodePos.y - prevNode.y) + prevNode.y
 						sprite.x = x - radius

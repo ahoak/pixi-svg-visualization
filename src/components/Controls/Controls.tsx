@@ -2,30 +2,21 @@ import React, { memo } from 'react'
 import styled from 'styled-components'
 import { ControlledDropdown } from './ControlledDropdown'
 import { ControlledSlider } from './ControlledSlider/ControlledSlider'
-import {
-	FilterOptions,
-	FilterYOptions,
-	DropdownXOptions,
-	DropdownYOptions,
-} from '../../types/data'
+import { FilterYOptions, DropdownYOptions } from '../../types/data'
 import { IDropdownOption, IChoiceGroupOption } from '@fluentui/react'
 import { SliderSettings } from '../../hooks/useDataBounds'
 import { RendererControls } from './RendererControls'
 
 interface ControlsProps {
-	xAxisFilter: FilterOptions
 	yAxisFilter: FilterYOptions
-	onXDropDrownChange: (
-		event: React.FormEvent<HTMLDivElement>,
-		item?: IDropdownOption,
-	) => void
+
 	onYDropDrownChange: (
 		event: React.FormEvent<HTMLDivElement>,
 		item?: IDropdownOption,
 	) => void
-	onSliderChange: (value: number) => void
-	sliderSettings: SliderSettings
-	selectedMax: number
+	// onSliderChange: (value: number) => void
+	// sliderSettings: SliderSettings
+	// selectedMax: number
 
 	selectedRender: string
 	onRendererChange: (
@@ -35,35 +26,27 @@ interface ControlsProps {
 }
 
 export const Controls: React.FC<ControlsProps> = memo(function Controls({
-	xAxisFilter,
 	yAxisFilter,
-	onXDropDrownChange,
 	onYDropDrownChange,
-	onSliderChange,
-	sliderSettings,
-	selectedMax,
+	// onSliderChange,
+	// sliderSettings,
+	// selectedMax,
 	selectedRender,
 	onRendererChange,
 }) {
 	return (
 		<ControlStyles>
 			<ControlledDropdown
-				selectedOption={xAxisFilter}
-				onDropDrownChange={onXDropDrownChange}
-				options={DropdownXOptions}
-				label={'x-axis'}
-			/>
-			<ControlledDropdown
 				selectedOption={yAxisFilter}
 				onDropDrownChange={onYDropDrownChange}
 				options={DropdownYOptions}
 				label={'grouped dogs by:'}
 			/>
-			<ControlledSlider
+			{/* <ControlledSlider
 				sliderOnChange={onSliderChange}
 				sliderSettings={sliderSettings}
 				sliderValue={selectedMax}
-			/>
+			/> */}
 			<RendererControls
 				selectedRender={selectedRender}
 				onChange={onRendererChange}

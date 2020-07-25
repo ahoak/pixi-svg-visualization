@@ -2,7 +2,7 @@ import { useCallback } from 'react'
 
 // updates the position of the tooltip and change visibility
 export function useTooltipPositioner(
-	element: HTMLDivElement | null,
+	element?: HTMLDivElement | null,
 ): (pos: [number, number]) => void {
 	return useCallback(
 		(postion: [number, number]) => {

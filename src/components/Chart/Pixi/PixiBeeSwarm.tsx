@@ -1,27 +1,24 @@
 import React, { memo, useRef } from 'react'
 import { usePixiInstance } from './hooks/usePixiInstance'
 import { useUpdatedData } from './hooks/useUpdatedData'
-import { BeeSwarmSVG } from './BeeSwarmSVG'
 import styled from 'styled-components'
-import { ScaleProps } from '../types'
 import { Renderers } from '../../Controls/RendererControls'
 import { useCallbackRef } from '../hooks/useCallbackRef'
-import {
-	DogDescriptionItem,
-	FilterYOptions,
-	FilterOptions,
-} from '../../../types/data'
+import { DogMap } from '../../../types/data'
+import { ScaleBand, ScaleLinear } from 'd3-scale'
+import { BeeSwarmContainer } from '../SVG/BeeSwarmSVG'
+import { Data } from '../types'
 
 export interface PixiBeeSwarmProps {
-	data: DogDescriptionItem[]
+	data: Data[]
 	width: number
 	height: number
 	vpHeight: number
 	vpWidth: number
-	scales: ScaleProps
 	renderer: Renderers
-	yAxisFilter: FilterYOptions
-	xAxisFilter: FilterOptions
+	yScale: ScaleBand<string>
+	xScale: ScaleLinear<number, number>
+	details?: DogMap
 }
 
 export const PixiBeeSwarm: React.FC<PixiBeeSwarmProps> = memo(
@@ -31,14 +28,13 @@ export const PixiBeeSwarm: React.FC<PixiBeeSwarmProps> = memo(
 		height,
 		vpWidth,
 		vpHeight,
-		scales,
 		renderer,
-		yAxisFilter,
-		xAxisFilter,
+		xScale,
+		yScale,
+		details,
 	}: PixiBeeSwarmProps) {
 		const tooltip = useRef<HTMLDivElement | null>(null)
 		const [setCanvasElement, canvasElement] = useCallbackRef<HTMLDivElement>()
-		const { xScale, yScale } = scales
 
 		// setup pixi instance
 		const pixiInstance = usePixiInstance({
@@ -47,21 +43,22 @@ export const PixiBeeSwarm: React.FC<PixiBeeSwarmProps> = memo(
 			toolTipElement: tooltip.current,
 			containerElement: canvasElement,
 			renderer,
-			yAxisFilter,
-			xAxisFilter,
-			scales,
+			details,
 		})
 		// update sprites with new data
-		useUpdatedData({ data, pixiInstance, yAxisFilter, xAxisFilter, renderer })
+		useUpdatedData({ data, pixiInstance, renderer })
 
 		return (
 			<ChartStyle>
-				<BeeSwarmSVG
+				<BeeSwarmContainer
+					data={[]}
 					width={width}
 					vpHeight={vpHeight}
 					vpWidth={vpWidth}
 					height={height}
-					scales={{ xScale, yScale }}
+					xScale={xScale}
+					yScale={yScale}
+					showData={false}
 				/>
 				<PixiElement ref={setCanvasElement} className="canvas-ref" />
 				<ToolTip ref={tooltip} className="tooltip-ref" />

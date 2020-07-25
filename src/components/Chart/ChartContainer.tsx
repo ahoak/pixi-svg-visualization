@@ -1,27 +1,21 @@
 import React, { memo, useMemo } from 'react'
-import {
-	FilterYOptions,
-	DogDescriptionItem,
-	FilterOptions,
-} from '../../types/data'
+import { FilterYOptions, DogDescriptionItem, DogMap } from '../../types/data'
 import styled from 'styled-components'
-import { useXRange, useYRange } from './hooks/range'
-import { useXScale, useYScale } from './hooks/scales'
 import { useViewportDimensions } from './hooks/useViewportDimensions'
-import { useColorizer } from './hooks/color'
-import { PixiBeeSwarm } from './Pixi'
 import { SVGBeeSwarm } from './SVG'
 import { Renderers } from '../Controls/RendererControls/RendererControls'
+import { useYRange, useXRange } from './hooks/range'
+import { useYScale, useXScale } from './hooks/scales'
+import { useTransformedData } from './hooks/useTransformedData'
+import { PixiBeeSwarm } from './Pixi'
 
 export interface ChartContainerProps {
 	data: DogDescriptionItem[]
 	width: number
 	height: number
 	yAxisFilter: FilterYOptions
-	xAxisFilter: FilterOptions
-	maxXComputed: Date | number
-	minXComputed: Date | number
 	renderer: Renderers
+	details?: DogMap
 }
 
 export const ChartContainer: React.FC<ChartContainerProps> = memo(
@@ -30,18 +24,22 @@ export const ChartContainer: React.FC<ChartContainerProps> = memo(
 		width,
 		height,
 		yAxisFilter,
-		xAxisFilter,
-		maxXComputed,
-		minXComputed,
 		renderer,
+		details,
 	}: ChartContainerProps) {
 		// Move scale setup here to use for both SVG/WebGL implementation
 		const [vpWidth, vpHeight] = useViewportDimensions(width, height)
-		const [minX, maxX] = useXRange(maxXComputed, minXComputed)
 		const yRange = useYRange(yAxisFilter)
-		const xScale = useXScale([minX, maxX], vpWidth)
+		const xRange = useXRange(details)
+		const xScale = useXScale(xRange, vpWidth)
 		const yScale = useYScale(yRange, vpHeight)
-		const colorScale = useColorizer(yRange)
+		const heightMapData = useTransformedData({
+			data,
+			yScale,
+			vpHeight,
+			vpWidth,
+			yAxisFilter,
+		})
 
 		const chart = useMemo(() => {
 			return renderer === Renderers.SVG ? (
@@ -50,10 +48,10 @@ export const ChartContainer: React.FC<ChartContainerProps> = memo(
 					vpHeight={vpHeight}
 					vpWidth={vpWidth}
 					height={height}
-					scales={{ xScale, yScale, colorScale }}
-					data={data}
-					xAxisFilter={xAxisFilter}
-					yAxisFilter={yAxisFilter}
+					data={heightMapData}
+					yScale={yScale}
+					xScale={xScale}
+					details={details}
 				/>
 			) : (
 				<PixiBeeSwarm
@@ -61,11 +59,11 @@ export const ChartContainer: React.FC<ChartContainerProps> = memo(
 					vpHeight={vpHeight}
 					vpWidth={vpWidth}
 					height={height}
-					scales={{ xScale, yScale, colorScale }}
-					data={data}
+					data={heightMapData}
 					renderer={renderer}
-					xAxisFilter={xAxisFilter}
-					yAxisFilter={yAxisFilter}
+					yScale={yScale}
+					xScale={xScale}
+					details={details}
 				/>
 			)
 		}, [
@@ -73,14 +71,13 @@ export const ChartContainer: React.FC<ChartContainerProps> = memo(
 			height,
 			vpHeight,
 			vpWidth,
-			xScale,
-			yScale,
-			colorScale,
-			data,
+			heightMapData,
 			renderer,
-			xAxisFilter,
-			yAxisFilter,
+			yScale,
+			details,
+			xScale,
 		])
+
 		return <ChartStyle>{chart}</ChartStyle>
 	},
 )

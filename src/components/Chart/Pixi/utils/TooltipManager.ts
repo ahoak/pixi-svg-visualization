@@ -1,8 +1,9 @@
-import { DogDescriptionItem } from '../../../../types/data'
+import { DogMap } from '../../../../types/data'
 import { getTooltipHtml } from '../../../../utils'
 
 class TooltipManager {
 	private toolTipElement: HTMLDivElement | null
+	private dogMap: DogMap = {}
 
 	constructor(toolTipElement: HTMLDivElement | null) {
 		this.toolTipElement = toolTipElement
@@ -10,6 +11,12 @@ class TooltipManager {
 
 	public setTooltipElement(element: HTMLDivElement | null) {
 		this.toolTipElement = element
+	}
+
+	public setDogMap(dogMap?: DogMap) {
+		if (dogMap) {
+			this.dogMap = dogMap
+		}
 	}
 
 	private updateTooltipPositioner(postion: [number, number]) {
@@ -25,11 +32,12 @@ class TooltipManager {
 		}
 	}
 
-	public showToolTip(data: DogDescriptionItem, coords: [number, number]) {
+	public showToolTip(id: string, coords: [number, number]) {
 		const tooltip = this.toolTipElement
 		if (tooltip) {
+			const innerHTML = this.dogMap[id] ? getTooltipHtml(this.dogMap[id]) : ''
 			tooltip.style.padding = `2px`
-			tooltip.innerHTML = getTooltipHtml(data)
+			tooltip.innerHTML = innerHTML
 			tooltip.style.backgroundColor = '#f1f1f1'
 			tooltip.style.border = `1px solid #767676`
 			tooltip.style.color = 'black'

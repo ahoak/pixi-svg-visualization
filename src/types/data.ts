@@ -88,22 +88,45 @@ export const SizeYRange = [
 	DogSize.Large,
 	DogSize.ExtraLarge,
 ]
-export interface DogDescriptionItem {
-	petId: number
-	posted: Date
-	age: number
-	gender: DogGender
-	size: DogSize
-	state: string
-	coat: DogCoat
-	name: string
-	adoptable: boolean
-	imgSrc: string
+// export interface DogDescriptionItem {
+// 	petId: number
+// 	posted: Date
+// 	age: number
+// 	gender: DogGender
+// 	size: DogSize
+// 	state: string
+// 	coat: DogCoat
+// 	name: string
+// 	adoptable: boolean
+// 	imgSrc: string
+// }
+export interface XYCoordinates {
+	x: number
+	y: number
+	color: string
+	hex: number
+	yFilter: FilterYOptions
 }
-
+export interface DogDescriptionItem {
+	pos: XYCoordinates[]
+	id: string
+}
 export interface ChartData {
 	id: number
 	xValue: number
 	yValue: string
 	name: string
+}
+
+export interface DogDetails {
+	posted: string
+	age: number
+	gender: DogGender
+	state: string
+	imgSrc: string
+	name: string
+}
+
+export interface DogMap {
+	[key: string]: DogDetails
 }

@@ -10,7 +10,7 @@ export function useRendererSelection(): [
 	) => void,
 ] {
 	const [selectedRenderer, setSelectedRenderer] = useState<Renderers>(
-		Renderers.SVG,
+		Renderers.WebGL,
 	)
 
 	const onRendererChange = useCallback(

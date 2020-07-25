@@ -1,23 +1,13 @@
 import { useMemo } from 'react'
-import {
-	scaleLinear,
-	ScaleLinear,
-	ScaleBand,
-	scaleBand,
-	scaleTime,
-	ScaleTime,
-} from 'd3-scale'
+import { scaleLinear, ScaleLinear, ScaleBand, scaleBand } from 'd3-scale'
 import { correctedMargins } from '../constants'
 
 export function useXScale(
-	[min, max]: [number | Date, number | Date],
+	[min, max]: [number, number],
 	vpWidth: number,
-): ScaleLinear<number, number> | ScaleTime<number, number> {
+): ScaleLinear<number, number> {
 	return useMemo(() => {
-		if (typeof min === 'number' && typeof max === 'number') {
-			return scaleLinear().domain([min, max]).range([0, vpWidth])
-		}
-		return scaleTime().domain([min, max]).range([0, vpWidth])
+		return scaleLinear().domain([min, max]).range([0, vpWidth])
 	}, [min, max, vpWidth])
 }
 
