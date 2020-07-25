@@ -89,6 +89,7 @@ const Container = styled(Page)`
 const Chart = styled.div`
 	position: relative;
 	flex: 1;
+	margin-top: 50px;
 `
 const Selections = styled.div`
 	height: 200px;
