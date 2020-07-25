@@ -1,8 +1,8 @@
 import { useState, useEffect, useMemo, useCallback } from 'react'
 import PixiRenderer from '../PixiRenderer'
 import { Dimensions } from '../../../../utils/types'
-import { Renderers } from '../../../Controls/RendererControls'
 import { DogMap } from '../../../../types/data'
+import { Renderers } from '../../../Controls/RendererControls/constants'
 
 export interface PixiInstance {
 	containerElement: HTMLDivElement | null

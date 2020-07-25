@@ -4,8 +4,8 @@ import { Dimensions } from '../../../utils/types'
 import { easeCubic } from 'd3-ease'
 import { correctedMargins } from '../constants'
 import TooltipManager from './utils/TooltipManager'
-import { Renderers } from '../../Controls/RendererControls'
 import { DogMap } from '../../../types/data'
+import { Renderers } from '../../Controls/RendererControls/constants'
 // @ts-ignore
 export * from 'pixi.js-legacy'
 // @ts-ignore

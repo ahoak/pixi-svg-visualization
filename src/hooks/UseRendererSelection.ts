@@ -1,6 +1,6 @@
 import { useState, useCallback, FormEvent } from 'react'
 import { IChoiceGroupOption } from '@fluentui/react'
-import { Renderers } from '../components/Controls/RendererControls'
+import { Renderers } from '../components/Controls/RendererControls/constants'
 
 export function useRendererSelection(): [
 	Renderers,

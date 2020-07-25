@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
-import { Renderers } from '../../../Controls/RendererControls'
 import PixiRenderer from '../PixiRenderer'
 import { Data } from '../../types'
+import { Renderers } from '../../../Controls/RendererControls/constants'
 
 interface UpdateProps {
 	data: Data[]

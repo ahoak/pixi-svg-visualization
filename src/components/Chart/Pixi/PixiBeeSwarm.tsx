@@ -2,12 +2,12 @@ import React, { memo, useRef } from 'react'
 import { usePixiInstance } from './hooks/usePixiInstance'
 import { useUpdatedData } from './hooks/useUpdatedData'
 import styled from 'styled-components'
-import { Renderers } from '../../Controls/RendererControls'
 import { useCallbackRef } from '../hooks/useCallbackRef'
 import { DogMap } from '../../../types/data'
 import { ScaleBand, ScaleLinear } from 'd3-scale'
 import { BeeSwarmContainer } from '../SVG/BeeSwarmSVG'
 import { Data } from '../types'
+import { Renderers } from '../../Controls/RendererControls/constants'
 
 export interface PixiBeeSwarmProps {
 	data: Data[]

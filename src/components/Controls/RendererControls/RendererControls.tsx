@@ -2,36 +2,7 @@ import * as React from 'react'
 import { memo, FormEvent } from 'react'
 import { IChoiceGroupOption, ChoiceGroup } from '@fluentui/react'
 import styled from 'styled-components'
-
-export enum Renderers {
-	SVG = 'SVG',
-	Canvas = 'Canvas',
-	WebGL = 'WebGL',
-}
-
-export const RendererOptions: IChoiceGroupOption[] = [
-	{
-		key: Renderers.SVG,
-		text: Renderers.SVG,
-		imageSrc: `${process.env.PUBLIC_URL}/cocker-sp-outline.svg`,
-		selectedImageSrc: `${process.env.PUBLIC_URL}/cocker-sp.svg`,
-		imageSize: { width: 32, height: 32 },
-	},
-	{
-		key: Renderers.Canvas,
-		text: Renderers.Canvas,
-		imageSrc: `${process.env.PUBLIC_URL}/cocker-sp-outline.svg`,
-		selectedImageSrc: `${process.env.PUBLIC_URL}/cocker-sp.svg`,
-		imageSize: { width: 32, height: 32 },
-	},
-	{
-		key: Renderers.WebGL,
-		text: Renderers.WebGL,
-		imageSrc: `${process.env.PUBLIC_URL}/cocker-sp-outline.svg`,
-		selectedImageSrc: `${process.env.PUBLIC_URL}/cocker-sp.svg`,
-		imageSize: { width: 32, height: 32 },
-	},
-]
+import { RendererOptions } from './constants'
 
 interface RendererControlsProps {
 	selectedRender: string

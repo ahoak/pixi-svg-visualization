@@ -1,6 +1,6 @@
 import React, { memo } from 'react'
 import { Slider, ISliderStyles } from '@fluentui/react'
-import { SliderSettings } from '../../../hooks/useDataBounds'
+import { SliderSettings } from '../../../hooks/useSliderSettings'
 import styled from 'styled-components'
 
 interface ControlledSliderProps {

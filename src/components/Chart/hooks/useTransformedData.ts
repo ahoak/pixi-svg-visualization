@@ -9,6 +9,7 @@ interface TransformedDataProps {
 	data: DogDescriptionItem[]
 	yAxisFilter: FilterYOptions
 	yScale: ScaleBand<string>
+	selectedMax: number
 }
 export function useTransformedData({
 	data,
@@ -16,6 +17,7 @@ export function useTransformedData({
 	vpHeight,
 	vpWidth,
 	yAxisFilter,
+	selectedMax,
 }: TransformedDataProps): Data[] {
 	const mappedData = useMemo((): Data[] => {
 		return data.reduce((acc, d) => {
@@ -41,9 +43,13 @@ export function useTransformedData({
 			return acc
 		}, [] as Data[])
 	}, [vpWidth, vpHeight, data, yAxisFilter, yScale])
-	return useMemo((): any[] => {
+	const heightData = useMemo((): Data[] => {
 		return mapHeight(mappedData, radius, yScale.bandwidth())
 	}, [mappedData, yScale])
+	return useMemo(() => heightData.slice(0, selectedMax), [
+		heightData,
+		selectedMax,
+	])
 }
 
 interface HMap {

@@ -3,11 +3,11 @@ import { FilterYOptions, DogDescriptionItem, DogMap } from '../../types/data'
 import styled from 'styled-components'
 import { useViewportDimensions } from './hooks/useViewportDimensions'
 import { SVGBeeSwarm } from './SVG'
-import { Renderers } from '../Controls/RendererControls/RendererControls'
 import { useYRange, useXRange } from './hooks/range'
 import { useYScale, useXScale } from './hooks/scales'
 import { useTransformedData } from './hooks/useTransformedData'
 import { PixiBeeSwarm } from './Pixi'
+import { Renderers } from '../Controls/RendererControls/constants'
 
 export interface ChartContainerProps {
 	data: DogDescriptionItem[]
@@ -15,6 +15,7 @@ export interface ChartContainerProps {
 	height: number
 	yAxisFilter: FilterYOptions
 	renderer: Renderers
+	selectedMax: number
 	details?: DogMap
 }
 
@@ -25,6 +26,7 @@ export const ChartContainer: React.FC<ChartContainerProps> = memo(
 		height,
 		yAxisFilter,
 		renderer,
+		selectedMax,
 		details,
 	}: ChartContainerProps) {
 		// Move scale setup here to use for both SVG/WebGL implementation
@@ -39,6 +41,7 @@ export const ChartContainer: React.FC<ChartContainerProps> = memo(
 			vpHeight,
 			vpWidth,
 			yAxisFilter,
+			selectedMax,
 		})
 
 		const chart = useMemo(() => {

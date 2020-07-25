@@ -10,6 +10,7 @@ import { SizedToParent } from '../../utils/SizedToParent'
 import { Dimensions } from '../../utils/types'
 import { ChartContainer } from '../Chart'
 import { useRendererSelection } from '../../hooks/UseRendererSelection'
+import { useSliderSettings } from '../../hooks/useSliderSettings'
 const sizeStyles = { overflowY: 'hidden' } as React.CSSProperties
 
 export interface VisualizePageProps {
@@ -34,23 +35,18 @@ export const VisualizePage: React.FC<VisualizePageProps> = memo(
 		// handle events and selection for dropdown
 		const [yAxisFilter, onYDropDrownChange] = useStateSelection()
 		// Map selected data values based on selections and get data bounds
-		// const {
-		// 	chartData,
-		// 	selectedMax,
-		// 	sliderSettings,
-		// 	onSliderChange,
-		// 	maxX,
-		// 	minX,
-		// } = useDataBounds(data, xAxisFilter)
+		const { selectedMax, sliderSettings, onSliderChange } = useSliderSettings(
+			data,
+		)
 		return (
 			<Container>
 				<Selections>
 					<Header />
 					<Controls
 						yAxisFilter={yAxisFilter}
-						// onSliderChange={onSliderChange}
-						// selectedMax={selectedMax}
-						// sliderSettings={sliderSettings}
+						onSliderChange={onSliderChange}
+						selectedMax={selectedMax}
+						sliderSettings={sliderSettings}
 						onYDropDrownChange={onYDropDrownChange}
 						selectedRender={selectedRenderer}
 						onRendererChange={onRendererChange}
@@ -66,6 +62,7 @@ export const VisualizePage: React.FC<VisualizePageProps> = memo(
 								yAxisFilter={yAxisFilter}
 								renderer={selectedRenderer}
 								details={details}
+								selectedMax={selectedMax}
 							/>
 						) : (
 							<></>

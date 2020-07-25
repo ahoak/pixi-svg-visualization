@@ -4,7 +4,7 @@ import { ControlledDropdown } from './ControlledDropdown'
 import { ControlledSlider } from './ControlledSlider/ControlledSlider'
 import { FilterYOptions, DropdownYOptions } from '../../types/data'
 import { IDropdownOption, IChoiceGroupOption } from '@fluentui/react'
-import { SliderSettings } from '../../hooks/useDataBounds'
+import { SliderSettings } from '../../hooks/useSliderSettings'
 import { RendererControls } from './RendererControls'
 
 interface ControlsProps {
@@ -14,9 +14,9 @@ interface ControlsProps {
 		event: React.FormEvent<HTMLDivElement>,
 		item?: IDropdownOption,
 	) => void
-	// onSliderChange: (value: number) => void
-	// sliderSettings: SliderSettings
-	// selectedMax: number
+	onSliderChange: (value: number) => void
+	sliderSettings: SliderSettings
+	selectedMax: number
 
 	selectedRender: string
 	onRendererChange: (
@@ -28,9 +28,9 @@ interface ControlsProps {
 export const Controls: React.FC<ControlsProps> = memo(function Controls({
 	yAxisFilter,
 	onYDropDrownChange,
-	// onSliderChange,
-	// sliderSettings,
-	// selectedMax,
+	onSliderChange,
+	sliderSettings,
+	selectedMax,
 	selectedRender,
 	onRendererChange,
 }) {
@@ -40,13 +40,13 @@ export const Controls: React.FC<ControlsProps> = memo(function Controls({
 				selectedOption={yAxisFilter}
 				onDropDrownChange={onYDropDrownChange}
 				options={DropdownYOptions}
-				label={'grouped dogs by:'}
+				label={'group dogs by:'}
 			/>
-			{/* <ControlledSlider
+			<ControlledSlider
 				sliderOnChange={onSliderChange}
 				sliderSettings={sliderSettings}
 				sliderValue={selectedMax}
-			/> */}
+			/>
 			<RendererControls
 				selectedRender={selectedRender}
 				onChange={onRendererChange}
