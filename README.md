@@ -66,7 +66,11 @@ In updateTransition() function is where this RAF loop starts. RequestAnimationFr
 
 <br />
 
-#### Preformance
+#### Presentation Content
+
+[SVG, Canvas, and WebGL: The power, the cost, and the beauty](https://www.canva.com/design/DAEDkRI93cI/naEIgGvb0xWc_BgnsuXYiw/view)
+
+#### Performance
 
 ⏳[Performance Benchmarking application repositiory](https://github.com/ahoak/renderer-benchmark)
 ⏳[Benchmark deployment](https://ahoak.github.io/renderer-benchmark/)
