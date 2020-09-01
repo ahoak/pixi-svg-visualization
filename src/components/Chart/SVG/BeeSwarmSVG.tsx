@@ -60,14 +60,25 @@ export const BeeSwarmContainer: React.FC<BeeSwarmContainerProps> = memo(
 
 		return (
 			<div style={{ position: 'absolute', zIndex: 1 }}>
-				<svg ref={setSvgEl} width={width} height={height}>
+				<svg ref={setSvgEl} width={width} height={height} role="img">
+					<title> Dog Posts on Petfinder API</title>
+					<desc id="desc">
+						{' '}
+						Show increasing number of dog post based on user selection on one
+						given day
+					</desc>
 					<g
 						className="viewport"
 						transform={`translate(${correctedMargins.left},${correctedMargins.top})`}
 					>
-						<g className="yscale" ref={setYAxisElement}></g>
-						<g className="xscale" ref={setXAxisElement}></g>
-						<g className="plotarea" width={vpWidth} height={vpHeight}>
+						<g className="yscale" ref={setYAxisElement} aria-label="yscale"></g>
+						<g className="xscale" ref={setXAxisElement} aria-label="xscale"></g>
+						<g
+							className="plotarea"
+							width={vpWidth}
+							height={vpHeight}
+							aria-label="plotarea"
+						>
 							<g ref={setBeeSwarmContainerElement} className="beeswarm"></g>
 						</g>
 					</g>

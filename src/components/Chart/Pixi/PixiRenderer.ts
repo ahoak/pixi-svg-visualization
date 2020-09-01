@@ -6,6 +6,7 @@ import { correctedMargins } from '../constants'
 import TooltipManager from './utils/TooltipManager'
 import { DogMap } from '../../../types/data'
 import { Renderers } from '../../Controls/RendererControls/constants'
+// If you want to use canvas 2d with Pixi:
 // @ts-ignore
 export * from 'pixi.js-legacy'
 // @ts-ignore
@@ -73,9 +74,11 @@ class PixiRenderer {
 			transparent: true,
 			forceCanvas: renderer === Renderers.Canvas,
 		})
+
 		const rendererType =
 			pixiRender.type === PIXI.RENDERER_TYPE.CANVAS ? 'CANVAS' : 'WEBGL'
 		console.log(`pixiRenderer flavor: ${rendererType}`)
+
 		return pixiRender
 	}
 
@@ -136,8 +139,6 @@ class PixiRenderer {
 				this.spriteKeys.add(key)
 				this.nodesStage.addChild(sprite)
 			})
-			// uncomment to debug sprite props
-			// console.log(this.spriteMap[Object.keys(this.spriteMap)[0]].height)
 			this.renderPixi()
 		}
 	}
@@ -192,8 +193,8 @@ class PixiRenderer {
 
 	private updateTransition(currentData: Data[]) {
 		if (Object.keys(this.spriteMap).length > 0) {
-			let startScale = this.tweenedScale
-			let targetScale = 1
+			const startScale = this.tweenedScale
+			const targetScale = 1
 			let start: number | undefined
 			const tweenRender = () => {
 				if (start === undefined) {

@@ -10,7 +10,7 @@ interface ControlledSliderProps {
 }
 
 const sliderStyles: Partial<ISliderStyles> = {
-	slideBox: { width: 300 },
+	slideBox: { maxWidth: 300 },
 	root: { display: 'inline-table', fontFamily: "'Gaegu', cursive" },
 	titleLabel: { fontFamily: "'Gaegu', cursive" },
 }

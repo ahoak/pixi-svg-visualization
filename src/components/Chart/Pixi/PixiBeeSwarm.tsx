@@ -48,6 +48,7 @@ export const PixiBeeSwarm: React.FC<PixiBeeSwarmProps> = memo(
 		// update sprites with new data
 		useUpdatedData({ data, pixiInstance, renderer })
 
+		// reuse BeeSwarmContainer with Pixi version and only draw axis
 		return (
 			<ChartStyle>
 				<BeeSwarmContainer

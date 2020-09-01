@@ -57,27 +57,27 @@ interface HMap {
 }
 
 function mapHeight(data: Data[], radius: number, maxBandwidth: number) {
-	let hMap: HMap = {}
+	const hMap: HMap = {}
 	let rFactor = 0
-	let xOffset = radius * 2
+	const xOffset = radius * 2
 	let yHeight = 0
 	let positive = true
 
-	for (let d of data) {
+	for (const d of data) {
 		rFactor = Math.floor(d.x / xOffset)
 		if (!hMap[rFactor]) {
 			hMap[rFactor] = []
 		}
 		hMap[rFactor].push(d)
 	}
-	let output: any[] = []
-	for (let k in hMap) {
+	const output: any[] = []
+	for (const k in hMap) {
 		const arr = hMap[k]
 		yHeight = 0
 		let yHeightDown = 0
 		let maxX = 0
 		positive = true
-		for (let node of arr) {
+		for (const node of arr) {
 			maxX = Math.max(maxX, node.x)
 			if (positive) {
 				yHeight += yHeight === 0 ? 0 : radius

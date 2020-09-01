@@ -89,6 +89,6 @@ const Chart = styled.div`
 	margin-top: 50px;
 `
 const Selections = styled.div`
-	height: 200px;
 	position: relative;
+	display: block;
 `

@@ -40,6 +40,7 @@ export function useCircleDrawing({
 							.attr('cx', (d: Data) => d.x)
 							.attr('cy', 0)
 							.attr('r', defaultRadius)
+							.attr('aria-label', (d: Data) => `${d.yFilter}-${d.x}`)
 							.call((e: any) =>
 								e
 									.interrupt()
@@ -71,8 +72,7 @@ export function useCircleDrawing({
 				.on('mouseover', function (d: Data) {
 					// @ts-ignore
 					select(this).attr('r', defaultRadius * 2)
-
-					// // show tooltip
+					// show tooltip
 					onCircleMouseover(d.id, [d.x, d.y])
 				})
 				.on('mouseout', function (d: Data) {

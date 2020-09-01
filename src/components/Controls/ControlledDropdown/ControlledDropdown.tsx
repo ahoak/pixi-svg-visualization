@@ -5,7 +5,7 @@ import { debounce } from '../../../utils/debounce'
 import styled from 'styled-components'
 
 const dropdownStyles: Partial<IDropdownStyles> = {
-	dropdown: { width: 150 },
+	dropdown: { maxWidth: 150 },
 	root: { display: 'inline-table' },
 	title: { fontFamily: "'Gaegu', cursive", fontSize: 18 },
 	label: { fontFamily: "'Gaegu', cursive" },

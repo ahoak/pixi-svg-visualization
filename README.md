@@ -2,7 +2,7 @@
 
 Example application for a simple data visual using Pixi.js webGL renderer layered on top of SVG. This application visualizes all the pets on PetFinder for a specific day (Sept 29th 2019).
 
-Data was collected and processed by the Pudding and can be found in [this](https://github.com/ahoak/data/tree/master/dog-shelters) fork. For the purpose of this application dog ages were approximated based on age categorization and layout is precalulated. For a more dynamic layout, the use of a webworker would help reduce CPU overhead.
+Data was collected and processed by the Pudding and can be found in [this](https://github.com/ahoak/data/tree/master/dog-shelters) fork. For this application dog ages were approximated based on age categorization and layout is precalulated. For a more dynamic layout, the use of a webworker would help reduce CPU overhead.
 
 _This is not meant to be productionized code but hightlight how to use webGL for the purpose of data visualization._
 
@@ -39,7 +39,7 @@ SVG does not handling rendering and animating the full dataset well and it is re
 ### PIXI
 
 <img src="/assets/hybrid_approach.JPG" alt="Hybrid Approach"
-	title="Hybrid Approach" height="200" />
+    title="Hybrid Approach" height="300" a/>
 <br />
 
 The pixi application uses a layered approach where an SVG component creates the axis. The pixi component is layered above the SVG. Each of the pixi sprites are interactive, which means we can attach a event handler to the sprites. The tooltip is called when the `onMouseOver` event occurs and sends coordinates to position tooltip.
@@ -55,7 +55,7 @@ When data is initialized, the enter() function will create a sprite map using a 
 When nodes need to be updated, the logic to update is done in a requestAnimationFrame loop, which is also referred to as a game loop.
 
 <img src="/assets/RAF_loop.JPG" alt="RAF Loop"
-	title="RAF Loop" width="200" height="200" />
+    title="RAF Loop"  height="300" />
 <br />
 
 In updateTransition() function is where this RAF loop starts. RequestAnimationFrame is called on TweenRender() which iterates over the data, and update the corresponding sprite from the sprite map for each data point. The x,y positions are calculated based on the current progress of the tween and interpolated using d3-ease utility. After iterating through the data, the renderer will render the updated sprites on the scene. The cycle will continue until the total length of tween duration.
@@ -103,13 +103,14 @@ In updateTransition() function is where this RAF loop starts. RequestAnimationFr
 
 [Data Visualization Accessibility: Where Are We Now, and What’s Next?](https://medium.com/nightingale/data-visualization-accessibility-where-are-we-now-and-whats-next-b2c9eeac4e8b)
 [Accessible Charts with Aria (SVG)](https://blog.tenon.io/accessible-charts-with-aria)
+<br />
 A few notes...
-This is a pretty broad topic but here are a couple angles we can look at:
+This is a broad topic but here are a couple angles we can look at:
 
-- With color-impaired users, using colors that allow differentiation of categories
-- With visually impaired, not blind users, customizing font size, enabling high contrast mode, kerning space between characters, border contrast between bars
+- With color-impaired users, using colors that allow differentiation of categories.
+- With visually impaired, not blind users, customizing font size, enabling high contrast mode, kerning space between characters, border contrast between bars.
 - For blind users, using keyboard-navigation and tabbing through the visual. For more complex visuals and webGL, we may need to make something custom or a table and configure screen reader interaction.
-- Replace visual with table for screen readers or summarization for large data sets and allow option for data exploration.
+- Replace visual with table for screen readers or summary for large data sets and allow option for data exploration.
 - Allow Enable/Disable animation.
 - Alternative descriptions for the charts.
 
