@@ -1,14 +1,14 @@
 {
   "files": {
     "main.css": "/pixi-svg-visualization/static/css/main.fde7c068.chunk.css",
-    "main.js": "/pixi-svg-visualization/static/js/main.fe9a47ed.chunk.js",
-    "main.js.map": "/pixi-svg-visualization/static/js/main.fe9a47ed.chunk.js.map",
+    "main.js": "/pixi-svg-visualization/static/js/main.3c5d54e7.chunk.js",
+    "main.js.map": "/pixi-svg-visualization/static/js/main.3c5d54e7.chunk.js.map",
     "runtime-main.js": "/pixi-svg-visualization/static/js/runtime-main.688227c4.js",
     "runtime-main.js.map": "/pixi-svg-visualization/static/js/runtime-main.688227c4.js.map",
     "static/js/2.6a88be9b.chunk.js": "/pixi-svg-visualization/static/js/2.6a88be9b.chunk.js",
     "static/js/2.6a88be9b.chunk.js.map": "/pixi-svg-visualization/static/js/2.6a88be9b.chunk.js.map",
     "index.html": "/pixi-svg-visualization/index.html",
-    "precache-manifest.fbe4d31ee12497bb6cc0d50ae958b785.js": "/pixi-svg-visualization/precache-manifest.fbe4d31ee12497bb6cc0d50ae958b785.js",
+    "precache-manifest.df623116d3d3a25c0d32db51b1548ca1.js": "/pixi-svg-visualization/precache-manifest.df623116d3d3a25c0d32db51b1548ca1.js",
     "service-worker.js": "/pixi-svg-visualization/service-worker.js",
     "static/css/main.fde7c068.chunk.css.map": "/pixi-svg-visualization/static/css/main.fde7c068.chunk.css.map",
     "static/js/2.6a88be9b.chunk.js.LICENSE.txt": "/pixi-svg-visualization/static/js/2.6a88be9b.chunk.js.LICENSE.txt"
@@ -17,6 +17,6 @@
     "static/js/runtime-main.688227c4.js",
     "static/js/2.6a88be9b.chunk.js",
     "static/css/main.fde7c068.chunk.css",
-    "static/js/main.fe9a47ed.chunk.js"
+    "static/js/main.3c5d54e7.chunk.js"
   ]
 }
